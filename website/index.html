@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Yanis Ramy Oulad Daoud | Cloud & DevOps</title>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Poppins',sans-serif;
+}
+
+body{
+background: linear-gradient(135deg,#0f172a,#1e293b,#020617);
+color:white;
+display:flex;
+justify-content:center;
+align-items:center;
+min-height:100vh;
+padding:20px;
+}
+
+.container{
+display:flex;
+max-width:1050px;
+width:100%;
+background:rgba(255,255,255,0.05);
+backdrop-filter:blur(10px);
+border-radius:20px;
+padding:30px;
+box-shadow:0 10px 35px rgba(0,0,0,0.7);
+}
+
+.profile-photo{
+flex:0 0 200px;
+margin-right:30px;
+}
+
+.profile-photo img{
+width:100%;
+border-radius:50%;
+border:3px solid #38bdf8;
+box-shadow:0 0 20px rgba(56,189,248,0.7);
+}
+
+.content{
+flex:1;
+}
+
+.header h1{
+font-size:2rem;
+color:#38bdf8;
+margin-bottom:8px;
+}
+
+.header p{
+color:#cbd5f5;
+margin-bottom:20px;
+}
+
+.about{
+background:rgba(255,255,255,0.05);
+padding:15px;
+border-radius:12px;
+margin-bottom:20px;
+}
+
+.about h2{
+color:#38bdf8;
+margin-bottom:10px;
+}
+
+.about p{
+color:#e2e8f0;
+line-height:1.6;
+font-size:0.95rem;
+}
+
+.messages{
+margin-bottom:15px;
+padding:12px;
+background:rgba(56,189,248,0.08);
+border:1px solid rgba(56,189,248,0.3);
+border-radius:12px;
+max-height:200px;
+overflow-y:auto;
+}
+
+.messages p{
+background:rgba(255,255,255,0.07);
+padding:8px;
+border-radius:8px;
+margin-bottom:6px;
+}
+
+input[type="text"]{
+width:100%;
+padding:12px;
+border-radius:8px;
+border:1px solid rgba(56,189,248,0.3);
+background:rgba(255,255,255,0.05);
+color:white;
+margin-bottom:10px;
+}
+
+input[type="text"]:focus{
+outline:none;
+border-color:#38bdf8;
+box-shadow:0 0 10px rgba(56,189,248,0.8);
+}
+
+input[type="submit"]{
+width:100%;
+padding:12px;
+border:none;
+border-radius:8px;
+background:#38bdf8;
+color:black;
+font-weight:600;
+cursor:pointer;
+transition:0.3s;
+}
+
+input[type="submit"]:hover{
+background:#0ea5e9;
+transform:translateY(-2px);
+box-shadow:0 0 15px rgba(56,189,248,0.8);
+}
+
+@media(max-width:800px){
+
+.container{
+flex-direction:column;
+align-items:center;
+}
+
+.profile-photo{
+margin-right:0;
+margin-bottom:20px;
+}
+
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<div class="profile-photo">
+<img src="DSC_0675.jpg" alt="Photo de Yanis">
+</div>
+
+<div class="content">
+
+<div class="header">
+<h1>Yanis Ramy Oulad Daoud</h1>
+<p>Étudiant en Cloud Computing | EPITA | Recherche alternance 2 ans</p>
+</div>
+
+<div class="about">
+
+<h2>À propos de moi</h2>
+
+<p>
+Bonjour je m'appelle <b>Yanis</b>.  
+Je suis étudiant en <b> diplôme d’ingénieur en Cloud Computing</b> à l'école <b>EPITA</b> et je recherche une alternance de 2 ans pour développer mes compétences professionnelles.
+</p>
+
+<p style="margin-top:10px;">
+Je travaille sur des projets liés au <b>Cloud, DevOps et automatisation</b>, et je suis passionné par la conception d'infrastructures fiables et évolutives.
+</p>
+
+<p style="margin-top:10px;">
+<b>Projet DevOps :</b><br>
+J'ai déployé une application <b>Flask + MySQL</b> sur <b>AWS EC2</b> avec <b>Docker et Docker Compose</b>.  
+Les services communiquent via un réseau Docker avec des volumes persistants, et un pipeline <b>CI/CD avec Jenkins</b> automatise le déploiement.
+</p>
+
+<p style="margin-top:10px;">
+Le code source est hébergé sur <b>GitHub</b>.
+</p>
+
+</div>
+
+<div class="messages">
+{% for message in messages %}
+<p>{{ message[0] }}</p>
+{% endfor %}
+</div>
+
+<form id="messageForm">
+<input type="text" name="new_message" placeholder="Écrire un message..." required>
+<input type="submit" value="Envoyer">
+</form>
+
+</div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+$(document).ready(function(){
+$("#messageForm").on("submit",function(event){
+event.preventDefault();
+let messageInput=$("input[name='new_message']");
+let message=messageInput.val().trim();
+if(message===""){
+alert("Le message ne peut pas être vide !");
+return;
+}
+$.ajax({
+url:"/submit",
+type:"POST",
+data:{new_message:message},
+success:function(response){
+if(response && response.message){
+$(".messages").append("<p>"+response.message+"</p>");
+messageInput.val("");
+}
+},
+error:function(xhr,status,error){
+console.error("Erreur AJAX :",status,error);
+}
+});
+});
+});
+</script>
+
+</body>
+</html>
