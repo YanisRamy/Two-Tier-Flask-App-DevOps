@@ -273,7 +273,7 @@ docker logs two-tier-app
 
 ## Conclusion
 
-The CI/CD pipeline is fully automated. Every `git push` triggers Jenkins via GitHub webhook to build and deploy the application automatically — no manual intervention required.
+The CI/CD pipeline is fully automated. Every `git push` triggers Jenkins via GitHub webhook to build and deploy the application automatically no manual intervention required.
 
 ---
 
