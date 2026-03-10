@@ -277,12 +277,11 @@ The CI/CD pipeline is fully automated. Every `git push` triggers Jenkins via Git
 
 ## Infrastructure Diagram
 
-![Infrastructure](screen%20and%20diagrams/Infrastructure.png)
+![Infrastructure](screen%20and%20diagrams/infrastructure-diagram.png)
 
 ---
 
 ## Workflow Diagram
 
-![Workflow](screen%20and%20diagrams/project_workflow.png)
-
+![Workflow](screen%20and%20diagrams/workflow.png)
 ---
