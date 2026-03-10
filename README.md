@@ -66,8 +66,8 @@ Every push to GitHub triggers a pipeline that automatically builds and deploys t
 
 ## Step 1: AWS EC2 Instance Preparation
 
+![Security Group](screen%20and%20diagrams/dashboard%20AWS%.png)
 ![EC2 Setup](screen%20and%20diagrams/EC2%20instance%20configuration.png)
-![Security Group](screen%20and%20diagrams/connecting%20instance%20using%20SSH.png)
 
 ### 1. Launch EC2 Instance
 - Navigate to the **AWS EC2 console**
