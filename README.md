@@ -1,8 +1,6 @@
-# Two-Tier Flask App — Automated CI/CD Pipeline on AWS
+# Two-Tier Flask App an Automated CI/CD Pipeline on AWS
 
-![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/YanisRamy/Two-Tier-Flask-App-DevOps/ci-cd.yml?branch=main)
 ![GitHub Repo stars](https://img.shields.io/github/stars/YanisRamy/Two-Tier-Flask-App-DevOps)
-![License](https://img.shields.io/github/license/YanisRamy/Two-Tier-Flask-App-DevOps)
 
 **Author:** Oulad Daoud Yanis Ramy  
 **Date:** March 10, 2026
