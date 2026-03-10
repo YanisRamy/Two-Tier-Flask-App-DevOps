@@ -107,13 +107,22 @@ sudo systemctl restart jenkins
 
 ### Dockerfile
 ```dockerfile
-FROM python:3.9-slim
+FROM python:3.9-slim 
+
 WORKDIR /app
-RUN apt-get update && apt-get install -y gcc default-libmysqlclient-dev pkg-config && rm -rf /var/lib/apt/lists/*
-COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+
+
+RUN apt-get update && apt-get install -y gcc default-libmysqlclient-dev pkg-config && \
+rm -rf /var/lib/apt/lists/* 
+
+COPY requirement.txt .
+
+RUN pip install --no-cache-dir -r requirement.txt
+
 COPY . .
+
 EXPOSE 5000
+
 CMD ["python", "app.py"]
 ```
 
@@ -126,57 +135,81 @@ services:
     container_name: mysql
     image: mysql
     environment:
-      MYSQL_DATABASE: "devops"
       MYSQL_ROOT_PASSWORD: "root"
+      MYSQL_DATABASE: "devops"
     ports:
       - "3306:3306"
-    volumes:
-      - mysql-data:/var/lib/mysql
-    networks:
-      - two-tier
-    restart: always
 
-  flask:
-    build: .
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+    networks:
+      - two-tier-nt
+
+    restart: always
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot","-proot"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 60s
+
+
+  flask-app:
     container_name: two-tier-app
+    build:
+      context: .
+
     ports:
       - "5000:5000"
+
     environment:
       - MYSQL_HOST=mysql
       - MYSQL_USER=root
       - MYSQL_PASSWORD=root
       - MYSQL_DB=devops
+
     networks:
-      - two-tier
+      - two-tier-nt
+
     depends_on:
-      - mysql
-    restart: always
+      mysql:
+        condition: service_healthy
+
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:5000/health || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 60s
 
 volumes:
-  mysql-data:
+  mysql_data:
 
 networks:
-  two-tier:
+  two-tier-nt:
 ```
 
 ### Jenkinsfile
 ```groovy
-pipeline {
+pipeline{
     agent any
-    stages {
-        stage('Clone Code') {
-            steps {
-                git branch: 'main', url: 'https://github.com/YanisRamy/Two-Tier-Flask-App-DevOps.git'
+    stages{
+        stage('Clone repo'){
+            steps{
+                git branch: 'main', url: 'https://github.com/prashantgohel321/DevOps-Project-Two-Tier-Flask-App.git'
             }
         }
-        stage('Build Docker Image') {
-            steps {
-                sh 'docker build -t flask-app:latest .'
+        stage('Build image'){
+            steps{
+                sh 'docker build -t flask-app .'
             }
         }
-        stage('Deploy with Docker Compose') {
-            steps {
+        stage('Deploy with docker compose'){
+            steps{
+                // existing container if they are running
                 sh 'docker compose down || true'
+                // start app, rebuilding flask image
                 sh 'docker compose up -d --build'
             }
         }
