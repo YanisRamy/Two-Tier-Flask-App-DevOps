@@ -66,13 +66,13 @@ Every push to GitHub triggers a pipeline that automatically builds and deploys t
 
 ## Step 1: AWS EC2 Instance Preparation
 
-![Security Group](screen%20and%20diagrams/dashboard%20AWS.png)
-![EC2 Setup](screen%20and%20diagrams/EC2%20instance%20configuration.png)
+![AWS Dashboard](screen%20and%20diagrams/dashboard%20AWS.png)
+![Security Group](screen%20and%20diagrams/connecting%20instance%20using%20SSH.png)
 
 ### 1. Launch EC2 Instance
 - Navigate to the **AWS EC2 console**
 - Launch a new instance using the **Ubuntu 22.04 LTS** AMI
-- Select the **t2.micro** instance type for free-tier eligibility
+- Select the **t2.small** instance type
 - Create and assign a new **key pair** for SSH access
 
 ### 2. Configure Security Group
@@ -136,6 +136,8 @@ sudo apt update
 sudo apt install jenkins -y
 ```
 
+![Installing Java and Jenkins](screen%20and%20diagrams/installing%20java%20and%20jenkins%20from%20the%20jenkins%20website%20commadnes.png)
+
 ### 3. Start and Enable Jenkins Service
 ```bash
 sudo systemctl start jenkins
@@ -166,8 +168,8 @@ sudo systemctl restart jenkins
 FROM python:3.9-slim
 WORKDIR /app
 RUN apt-get update && apt-get install -y gcc default-libmysqlclient-dev pkg-config && rm -rf /var/lib/apt/lists/*
-COPY requirement.txt .
-RUN pip install --no-cache-dir -r requirement.txt
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
 COPY . .
 EXPOSE 5000
 CMD ["python", "app.py"]
@@ -259,6 +261,12 @@ pipeline {
    - Content type: `application/json`
    - Event: **Just the push event**
 7. Click **Build Now** for the first manual run
+
+### Screenshots
+
+![Jenkins Installation](screen%20and%20diagrams/intalation%20jenkins.png)
+![Jenkins Asking for Password](screen%20and%20diagrams/JEnkins%20asking%20for%20password.png)
+![Jenkins Ready to Use](screen%20and%20diagrams/JEnkins%20ready%20to%20use.png)
 
 ### Verify Deployment
 
